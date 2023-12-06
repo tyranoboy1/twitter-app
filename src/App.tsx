@@ -1,5 +1,12 @@
-function App() {
-  return <div>프로젝트시작</div>;
-}
+import Layout from "components/layout/Layout";
+import Router from "components/router/Router";
+
+const App = () => {
+  return (
+    <Layout>
+      <Router />
+    </Layout>
+  );
+};
 
 export default App;
