@@ -1,4 +1,5 @@
 import Layout from "components/layout/Layout";
+import Loader from "components/loading/Loader";
 import Router from "components/router/Router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "firebaseApp";
@@ -34,7 +35,7 @@ const App = () => {
         hideProgressBar
         newestOnTop
       />
-      {init ? <Router isAuthenticated={isAuthenticated} /> : "loading"}
+      {init ? <Router isAuthenticated={isAuthenticated} /> : <Loader />}
     </Layout>
   );
 };

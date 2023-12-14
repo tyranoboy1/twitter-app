@@ -1,20 +1,57 @@
+import { onClickSocialLogin } from "common/utils/userUtil";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { app } from "firebaseApp";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 /** 로그인 폼 컴포넌트 */
 const LoginForm = () => {
   const [error, setError] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
-  const [passwordConfirmation, setPasswordConfirmation] =
-    React.useState<string>("");
-  const onSubmit = () => {};
+  const navigate = useNavigate();
+
+  const onSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      const auth = getAuth(app);
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate("/");
+      toast.success("성공적으로 로그인이 되었습니다.");
+    } catch (error: any) {
+      toast.error(error?.code);
+    }
+  };
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { name, value },
     } = e;
-    console.log(name, value);
+
+    if (name === "email") {
+      setEmail(value);
+      const validRegex =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+      if (!value?.match(validRegex)) {
+        setError("이메일 형식이 올바르지 않습니다.");
+      } else {
+        setError("");
+      }
+    }
+
+    if (name === "password") {
+      setPassword(value);
+
+      if (value?.length < 8) {
+        setError("비밀번호는 8자리 이상 입력해주세요");
+      } else {
+        setError("");
+      }
+    }
   };
+
   return (
     <form className="form form--lg" onSubmit={onSubmit}>
       <div className="form__title">로그인</div>
@@ -66,7 +103,7 @@ const LoginForm = () => {
           type="button"
           name="google"
           className="form__btn--google"
-          //   onClick={onClickSocialLogin}
+          onClick={onClickSocialLogin}
         >
           Google로 로그인
         </button>
@@ -76,7 +113,7 @@ const LoginForm = () => {
           type="button"
           name="github"
           className="form__btn--github"
-          //   onClick={onClickSocialLogin}
+          onClick={onClickSocialLogin}
         >
           Github으로 로그인
         </button>
@@ -84,5 +121,4 @@ const LoginForm = () => {
     </form>
   );
 };
-
 export default LoginForm;

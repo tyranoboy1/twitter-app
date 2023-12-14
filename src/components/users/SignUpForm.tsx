@@ -1,3 +1,4 @@
+import { onClickSocialLogin } from "common/utils/userUtil";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { app } from "firebaseApp";
 import React from "react";
@@ -128,7 +129,7 @@ const SignUpForm = () => {
           type="button"
           name="google"
           className="form__btn--google"
-          //   onClick={onClickSocialLogin}
+          onClick={onClickSocialLogin}
         >
           Google로 회원가입
         </button>
@@ -138,7 +139,7 @@ const SignUpForm = () => {
           type="button"
           name="github"
           className="form__btn--github"
-          //   onClick={onClickSocialLogin}
+          onClick={onClickSocialLogin}
         >
           Github으로 회원가입
         </button>
