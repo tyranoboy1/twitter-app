@@ -1,4 +1,5 @@
 import { FirebaseApp, getApp, initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 
 /** Firebase 애플리케이션 인스턴스를 저장할 변수 선언 */
 export let app: FirebaseApp;
@@ -22,5 +23,7 @@ try {
 }
 
 const firebase = initializeApp(firebaseConfig);
+
+export const db = getFirestore(app);
 
 export default firebase;
