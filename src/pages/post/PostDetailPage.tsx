@@ -1,7 +1,7 @@
-import React from "react";
+import PostDetailForm from "components/post/PostDetailForm";
 
 const PostDetailPage = () => {
-  return <div>상세 게시글 페이지</div>;
+  return <PostDetailForm />;
 };
 
 export default PostDetailPage;
