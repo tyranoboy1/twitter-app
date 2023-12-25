@@ -13,4 +13,6 @@ export interface IPostProps {
   likes?: string[];
   likeCount?: number;
   comments?: any;
+  hashTags?: string[];
+  imageUrl?: string;
 }

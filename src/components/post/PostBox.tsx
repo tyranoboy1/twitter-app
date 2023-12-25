@@ -6,7 +6,8 @@ import { useContext } from "react";
 import AuthContext from "context/AuthContext";
 import { deleteDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
-import { db } from "firebaseApp";
+import { db, storage } from "firebaseApp";
+import { deleteObject, ref } from "firebase/storage";
 
 /** 게시글 리스트 박스 컴포넌트 */
 const PostBox = ({ post }: IPostBoxProps) => {
@@ -16,12 +17,18 @@ const PostBox = ({ post }: IPostBoxProps) => {
   const handleDelete = async () => {
     const confirm = window.confirm("삭제");
     if (confirm) {
+      /** 이미지 삭제 */
+      const imageRef = ref(storage, post?.imageUrl);
+      if (post?.imageUrl) {
+        deleteObject(imageRef).catch((error) => {
+          console.log(error);
+        });
+      }
       await deleteDoc(doc(db, "posts", post.id));
       toast.success("게시글을 삭제했습니다.");
       navigate("/");
     }
   };
-
   return (
     <div className="post__box" key={post?.id}>
       <Link to={`/posts/${post?.id}`}>
@@ -40,6 +47,24 @@ const PostBox = ({ post }: IPostBoxProps) => {
             <div className="post__createdAt">{post?.createdAt}</div>
           </div>
           <div className="post__box-content">{post?.content}</div>
+          {post?.imageUrl && (
+            <div className="post__image-div">
+              <img
+                src={post?.imageUrl}
+                alt="post img"
+                className="post__image"
+                width={100}
+                height={100}
+              />
+            </div>
+          )}
+          <div className="post-form__hashtags-outputs">
+            {post?.hashTags?.map((tag, index) => (
+              <span className="post-form__hashtags-tag" key={index}>
+                #{tag}
+              </span>
+            ))}
+          </div>
         </div>
       </Link>
       <div className="post__box-footer">
