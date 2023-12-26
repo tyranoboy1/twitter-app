@@ -1,7 +1,7 @@
-import React from "react";
+import ProfileForm from "components/profile/ProfileForm";
 
 const ProfilePage = () => {
-  return <div>프로필 페이지</div>;
+  return <ProfileForm />;
 };
 
 export default ProfilePage;

@@ -1,7 +1,7 @@
-import React from "react";
+import ProfileEditForm from "components/profile/ProfileEditForm";
 
 const ProfileEditPage = () => {
-  return <div>프로필 편집 페이지</div>;
+  return <ProfileEditForm />;
 };
 
 export default ProfileEditPage;
