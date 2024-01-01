@@ -1,7 +1,8 @@
-import React from "react";
+import Notifications from "components/notifications/Notifications";
 
+/** 알람 페이지 */
 const NotificationsPage = () => {
-  return <div>페이지</div>;
+  return <Notifications />;
 };
 
 export default NotificationsPage;

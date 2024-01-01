@@ -3,8 +3,10 @@ import { useCallback, useContext, useEffect } from "react";
 import { IFollowingProps, IUserProps } from "./interface/following.interface";
 import { db } from "firebaseApp";
 import {
+  addDoc,
   arrayRemove,
   arrayUnion,
+  collection,
   doc,
   onSnapshot,
   setDoc,
@@ -25,7 +27,7 @@ const FollowingBox = (props: IFollowingProps) => {
 
     try {
       if (user?.uid) {
-        // 내가 주체가 되어 '팔로잉' 컬렉션 생성 or 업데이트
+        /** 내가 주체가 되어 '팔로잉' 컬렉션 생성 or 업데이트 */
         const followingRef = doc(db, "following", user?.uid);
         await setDoc(
           followingRef,
@@ -35,7 +37,7 @@ const FollowingBox = (props: IFollowingProps) => {
           { merge: true }
         );
 
-        // 팔로우 당하는 사람이 주체가 되어 '팔로우' 컬렉션 생성 or 업데이트
+        /** 팔로우 당하는 사람이 주체가 되어 '팔로우' 컬렉션 생성 or 업데이트 */
         const followerRef = doc(db, "follower", post?.uid);
 
         await setDoc(
@@ -43,6 +45,21 @@ const FollowingBox = (props: IFollowingProps) => {
           { users: arrayUnion({ id: user?.uid }) },
           { merge: true }
         );
+
+        /**  팔로잉 알림 생성 */
+        await addDoc(collection(db, "notifications"), {
+          createdAt: new Date()?.toLocaleDateString("ko", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
+          content: `${
+            user?.email || user?.displayName
+          }가 글에 팔로우를 했습니다.`,
+          url: "#",
+          isRead: false,
+          uid: post?.uid,
+        });
 
         toast.success("팔로우를 했습니다.");
       }

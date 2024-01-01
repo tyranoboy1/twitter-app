@@ -1,7 +1,13 @@
 import React, { useContext } from "react";
 import { ICommentFormProps } from "./interface/comments.interface";
 import AuthContext from "context/AuthContext";
-import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "firebaseApp";
 import { toast } from "react-toastify";
 
@@ -10,6 +16,11 @@ const CommentForm = (props: ICommentFormProps) => {
   const { post } = props;
   const { user } = useContext(AuthContext);
   const [comment, setComment] = React.useState<string>("");
+
+  /** 글자 길이 조절 함수 */
+  const truncate = (str: string) => {
+    return str?.length > 10 ? str?.substring(0, 10) + "..." : str;
+  };
   const onSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -30,6 +41,22 @@ const CommentForm = (props: ICommentFormProps) => {
       await updateDoc(postRef, {
         comments: arrayUnion(commentObj),
       });
+
+      /** 댓글 생성 알람 추가 */
+      if (user?.uid !== post?.uid) {
+        await addDoc(collection(db, "notifications"), {
+          createdAt: new Date()?.toLocaleDateString("ko", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
+          uid: post?.uid,
+          isRead: false,
+          url: `/posts/${post?.id}`,
+          content: `"${truncate(post?.content)}" 글에 댓글이 작성되었습니다.`,
+        });
+      }
+
       toast.success("댓글을 생성했습니다.");
       setComment("");
       try {
