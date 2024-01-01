@@ -1,4 +1,4 @@
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { db } from "firebaseApp";
@@ -6,6 +6,9 @@ import { IPostProps } from "./interface/post.interface";
 import PostBox from "components/post/PostBox";
 import Loader from "components/loading/Loader";
 import PostHeader from "components/layout/PostHeader";
+import CommentForm from "components/comments/CommentForm";
+import { ICommentProps } from "components/comments/interface/comments.interface";
+import CommentBox from "components/comments/CommentBox";
 
 const PostDetailForm = () => {
   const params = useParams();
@@ -15,9 +18,9 @@ const PostDetailForm = () => {
   const getPost = useCallback(async () => {
     if (params.id) {
       const docRef = doc(db, "posts", params.id);
-      const docSnap = await getDoc(docRef);
-      console.log("db", db);
-      setPost({ ...(docSnap?.data() as IPostProps), id: docSnap?.id });
+      onSnapshot(docRef, (doc) => {
+        setPost({ ...(doc?.data() as IPostProps), id: doc?.id });
+      });
     }
   }, [params.id]);
 
@@ -28,7 +31,20 @@ const PostDetailForm = () => {
   return (
     <div className="post">
       <PostHeader />
-      {post ? <PostBox post={post} /> : <Loader />}
+      {post ? (
+        <>
+          <PostBox post={post} />
+          <CommentForm post={post} />
+          {post?.comments
+            ?.slice(0)
+            ?.reverse()
+            ?.map((data: ICommentProps, index: number) => (
+              <CommentBox data={data} post={post} key={index} />
+            ))}
+        </>
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 };
