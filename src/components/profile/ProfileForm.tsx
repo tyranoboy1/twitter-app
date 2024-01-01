@@ -11,31 +11,48 @@ import {
 import { db } from "firebaseApp";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { TabType } from "components/profile/interface/profile.interface";
 
-const PROFILE_DEFAULT_URL = "/logo192.png";
+const PROFILE_DEFAULT_URL = "/logo512.png";
 
 const ProfileForm = () => {
-  const [posts, setPosts] = React.useState<IPostProps[]>([]);
-  const { user } = useContext(AuthContext);
+  const [activeTab, setActiveTab] = React.useState<TabType>("my");
+  const [myPosts, setMyPosts] = React.useState<IPostProps[]>([]);
+  const [likePosts, setLikePosts] = React.useState<IPostProps[]>([]);
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+
   React.useEffect(() => {
     if (user) {
       let postsRef = collection(db, "posts");
-      let postsQuery = query(
+      const myPostQuery = query(
         postsRef,
         where("uid", "==", user.uid),
         orderBy("createdAt", "desc")
       );
+      const likePostQuery = query(
+        postsRef,
+        where("likes", "array-contains", user.uid),
+        orderBy("createdAt", "desc")
+      );
 
-      onSnapshot(postsQuery, (snapShot) => {
+      onSnapshot(myPostQuery, (snapShot) => {
         let dataObj = snapShot.docs.map((doc) => ({
           ...doc.data(),
           id: doc?.id,
         }));
-        setPosts(dataObj as IPostProps[]);
+        setMyPosts(dataObj as IPostProps[]);
+      });
+      onSnapshot(likePostQuery, (snapShot) => {
+        let dataObj = snapShot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc?.id,
+        }));
+        setLikePosts(dataObj as IPostProps[]);
       });
     }
-  });
+  }, [user]);
+
   return (
     <div className="home">
       <div className="home__top">
@@ -61,21 +78,45 @@ const ProfileForm = () => {
           <div className="profile__email">{user?.email}</div>
         </div>
         <div className="home__tabs">
-          <div className="home__tab home__tab--active">For You</div>
-          <div className="home__tab">Likes</div>
+          <div
+            className={`home__tab ${activeTab === "my" && "home__tab--active"}`}
+            onClick={() => setActiveTab("my")}
+          >
+            For You
+          </div>
+          <div
+            className={`home__tab ${
+              activeTab === "like" && "home__tab--active"
+            }`}
+            onClick={() => setActiveTab("like")}
+          >
+            Likes
+          </div>
         </div>
-        <div className="post">
-          {posts?.length > 0 ? (
-            posts.map((post) => <PostBox post={post} key={post.id} />)
-          ) : (
-            <div className="post__no-posts">
-              <div className="post__text">게시글이 없습니다.</div>
-            </div>
-          )}
-        </div>
+        {activeTab === "my" && (
+          <div className="post">
+            {myPosts?.length > 0 ? (
+              myPosts?.map((post) => <PostBox post={post} key={post.id} />)
+            ) : (
+              <div className="post__no-posts">
+                <div className="post__text">게시글이 없습니다.</div>
+              </div>
+            )}
+          </div>
+        )}
+        {activeTab === "like" && (
+          <div className="post">
+            {likePosts?.length > 0 ? (
+              likePosts?.map((post) => <PostBox post={post} key={post.id} />)
+            ) : (
+              <div className="post__no-posts">
+                <div className="post__text">게시글이 없습니다.</div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 };
-
 export default ProfileForm;
