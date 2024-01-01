@@ -1,3 +1,4 @@
+import { TabType } from "./../../profile/interface/profile.interface";
 /** 게시물 인터페이스 */
 export interface IPostBoxProps {
   post: IPostProps;
@@ -16,3 +17,5 @@ export interface IPostProps {
   hashTags?: string[];
   imageUrl?: string;
 }
+
+export type tabType = "all" | "following";

@@ -10,6 +10,7 @@ import CommentForm from "components/comments/CommentForm";
 import { ICommentProps } from "components/comments/interface/comments.interface";
 import CommentBox from "components/comments/CommentBox";
 
+/** 게시물 세부 컴포넌트 */
 const PostDetailForm = () => {
   const params = useParams();
   const [post, setPost] = useState<IPostProps | null>(null);
