@@ -14,7 +14,7 @@ import {
 import { db } from "firebaseApp";
 import { IUserProps } from "components/following/interface/following.interface";
 
-/** 홈 화면 컴포넌트 */
+/** 홈 화면 페이지 컴포넌트 */
 const HomePage = () => {
   /** 게시글 데이터를 저장하는 상태 */
   const [posts, setPosts] = React.useState<IPostProps[]>([]);

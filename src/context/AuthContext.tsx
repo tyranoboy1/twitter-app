@@ -9,6 +9,7 @@ const AuthContext = React.createContext({
   user: null as User | null,
 });
 
+/** user 정보 컨텍스트 */
 export const AuthContextProvider = ({ children }: IAuthProps) => {
   const [currentUser, setCurrentUser] = React.useState<User | null>(null);
   const auth = getAuth(app);

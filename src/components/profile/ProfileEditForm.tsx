@@ -17,6 +17,7 @@ import PostHeader from "components/layout/PostHeader";
 
 const STORAGE_DOWNLOAD_URL_STR = "https://firebasestorage.googleapis.com";
 
+/** 프로필 편집 폼 컴포넌트 */
 const ProfileEditForm = () => {
   const [displayName, setDisplayName] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);

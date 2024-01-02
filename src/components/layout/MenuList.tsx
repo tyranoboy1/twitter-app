@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoMdNotificationsOutline } from "react-icons/io";
 
+/** 하단 메뉴 탭바 컴포넌트 */
 const MenuList = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();

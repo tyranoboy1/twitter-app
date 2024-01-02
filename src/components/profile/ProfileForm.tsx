@@ -15,6 +15,7 @@ import { TabType } from "components/profile/interface/profile.interface";
 
 const PROFILE_DEFAULT_URL = "/logo512.png";
 
+/** 프로필 폼 컴포넌트 */
 const ProfileForm = () => {
   const [activeTab, setActiveTab] = React.useState<TabType>("my");
   const [myPosts, setMyPosts] = React.useState<IPostProps[]>([]);
