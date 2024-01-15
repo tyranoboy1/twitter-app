@@ -10,13 +10,14 @@ import {
 } from "firebase/firestore";
 import { db } from "firebaseApp";
 import { toast } from "react-toastify";
+import useTranslation from "hooks/useTranslation";
 
 /** 댓글 Form 컴포넌트 */
 const CommentForm = (props: ICommentFormProps) => {
   const { post } = props;
   const { user } = useContext(AuthContext);
   const [comment, setComment] = React.useState<string>("");
-
+  const t = useTranslation();
   /** 글자 길이 조절 함수 */
   const truncate = (str: string) => {
     return str?.length > 10 ? str?.substring(0, 10) + "..." : str;
@@ -80,7 +81,7 @@ const CommentForm = (props: ICommentFormProps) => {
         name="comment"
         id="comment"
         required
-        placeholder="What is happening?"
+        placeholder={t("POST_PLACEHOLDER")}
         onChange={onChange}
         value={comment}
       />
@@ -88,7 +89,7 @@ const CommentForm = (props: ICommentFormProps) => {
         <div />
         <input
           type="submit"
-          value="Comment"
+          value={t("BUTTON_COMMENT")}
           className="post-form__submit-btn"
           disabled={!comment}
         />

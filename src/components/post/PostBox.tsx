@@ -15,11 +15,13 @@ import { toast } from "react-toastify";
 import { db, storage } from "firebaseApp";
 import { deleteObject, ref } from "firebase/storage";
 import FollowingBox from "components/following/FollowingBox";
+import useTranslation from "hooks/useTranslation";
 
 /** 게시글 리스트 박스 컴포넌트 */
 const PostBox = ({ post }: IPostBoxProps) => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const t = useTranslation();
   /** 게시글 삭제함수 */
   const handleDelete = async () => {
     const confirm = window.confirm("삭제");
@@ -106,10 +108,10 @@ const PostBox = ({ post }: IPostBoxProps) => {
               className="post__delete"
               onClick={handleDelete}
             >
-              Delete
+              {t("BUTTON_DELETE")}
             </button>
             <button type="button" className="post__edit">
-              <Link to={`/posts/edit/${post?.id}`}>Edit</Link>
+              <Link to={`/posts/edit/${post?.id}`}>{t("BUTTON_EDIT")}</Link>
             </button>
           </>
         )}

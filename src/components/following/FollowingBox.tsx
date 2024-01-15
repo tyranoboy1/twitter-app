@@ -14,13 +14,14 @@ import {
 } from "firebase/firestore";
 import { toast } from "react-toastify";
 import React from "react";
+import useTranslation from "hooks/useTranslation";
 
 /** 팔로잉 박스 컴포넌트 */
 const FollowingBox = (props: IFollowingProps) => {
   const { post } = props;
   const { user } = useContext(AuthContext);
   const [postFollowers, setPostFollowers] = React.useState<any>([]);
-
+  const t = useTranslation();
   /** 팔로우 클릭 함수 */
   const onClickFollow = async (e: any) => {
     e.preventDefault();
@@ -115,7 +116,7 @@ const FollowingBox = (props: IFollowingProps) => {
           className="post__following-btn"
           onClick={onClickDeleteFollow}
         >
-          Following
+          {t("BUTTON_FOLLOWING")}
         </button>
       ) : (
         <button
@@ -123,7 +124,7 @@ const FollowingBox = (props: IFollowingProps) => {
           className="post__follow-btn"
           onClick={onClickFollow}
         >
-          Follower
+          {t("BUTTON_FOLLOW")}
         </button>
       )}
     </>

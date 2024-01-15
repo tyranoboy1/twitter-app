@@ -14,6 +14,7 @@ import {
 import AuthContext from "context/AuthContext";
 import { v4 as uuidv4 } from "uuid";
 import PostHeader from "components/layout/PostHeader";
+import useTranslation from "hooks/useTranslation";
 
 /** 게시글 입력 컴포넌트 */
 const PostEditForm = () => {
@@ -25,6 +26,7 @@ const PostEditForm = () => {
   const [imageFile, setImageFile] = React.useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
   const { user } = useContext(AuthContext);
+  const t = useTranslation();
   const handleFileUpload = (e: any) => {
     const {
       target: { files },
@@ -140,7 +142,7 @@ const PostEditForm = () => {
           required
           name="content"
           id="content"
-          placeholder="What is happening?"
+          placeholder={t("POST_PLACEHOLDER")}
           onChange={onChange}
           value={content}
         />
@@ -160,7 +162,7 @@ const PostEditForm = () => {
             className="post-form__input"
             name="hashtag"
             id="hashtag"
-            placeholder="해시태그 + 스페이스바 입력"
+            placeholder={t("POST_HASHTAG")}
             onChange={onChangeHashTag}
             onKeyUp={handleKeyUp}
             value={hashTag}
@@ -192,7 +194,7 @@ const PostEditForm = () => {
                   type="button"
                   onClick={handleDeleteImage}
                 >
-                  Clear
+                  {t("BUTTON_DELETE")}
                 </button>
               </div>
             )}

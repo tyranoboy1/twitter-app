@@ -12,6 +12,9 @@ import { db } from "firebaseApp";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { TabType } from "components/profile/interface/profile.interface";
+import { languageState } from "atom";
+import { useRecoilState } from "recoil";
+import useTranslation from "hooks/useTranslation";
 
 const PROFILE_DEFAULT_URL = "/logo512.png";
 
@@ -21,7 +24,14 @@ const ProfileForm = () => {
   const [myPosts, setMyPosts] = React.useState<IPostProps[]>([]);
   const [likePosts, setLikePosts] = React.useState<IPostProps[]>([]);
   const navigate = useNavigate();
+  const [language, setLanguage] = useRecoilState(languageState);
   const { user } = useContext(AuthContext);
+  const t = useTranslation();
+  /** 한영 변환 눌렀을때 함수 */
+  const onClickLanguage = () => {
+    setLanguage(language === "ko" ? "en" : "ko");
+    localStorage.setItem("language", language === "ko" ? "en" : "ko");
+  };
 
   React.useEffect(() => {
     if (user) {
@@ -66,13 +76,22 @@ const ProfileForm = () => {
             width={100}
             height={100}
           />
-          <button
-            type="button"
-            className="profile__btn"
-            onClick={() => navigate("/profile/edit")}
-          >
-            프로필 수정
-          </button>
+          <div className="profile__flex">
+            <button
+              type="button"
+              className="profile__btn"
+              onClick={() => navigate("/profile/edit")}
+            >
+              {t("BUTTON_EDIT_PROFILE")}
+            </button>
+            <button
+              type="button"
+              className="profile__btn--language"
+              onClick={onClickLanguage}
+            >
+              {language === "ko" ? "한국어" : "English"}
+            </button>
+          </div>
         </div>
         <div className="profile__text">
           <div className="profile__name">{user?.displayName || "사용자님"}</div>
@@ -83,7 +102,7 @@ const ProfileForm = () => {
             className={`home__tab ${activeTab === "my" && "home__tab--active"}`}
             onClick={() => setActiveTab("my")}
           >
-            For You
+            {t("TAB_ALL")}
           </div>
           <div
             className={`home__tab ${
@@ -91,7 +110,7 @@ const ProfileForm = () => {
             }`}
             onClick={() => setActiveTab("like")}
           >
-            Likes
+            {t("TAB_LIKES")}
           </div>
         </div>
         {activeTab === "my" && (

@@ -5,8 +5,8 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "firebaseApp";
 import React from "react";
 import { ToastContainer } from "react-toastify";
-
 import "react-toastify/dist/ReactToastify.css";
+import { RecoilRoot } from "recoil";
 
 const App = () => {
   /** Firebase 유저 정보 데이터 가져옴 */
@@ -28,15 +28,17 @@ const App = () => {
     });
   }, [auth]);
   return (
-    <Layout>
-      <ToastContainer
-        theme="dark"
-        autoClose={1000}
-        hideProgressBar
-        newestOnTop
-      />
-      {init ? <Router isAuthenticated={isAuthenticated} /> : <Loader />}
-    </Layout>
+    <RecoilRoot>
+      <Layout>
+        <ToastContainer
+          theme="dark"
+          autoClose={1000}
+          hideProgressBar
+          newestOnTop
+        />
+        {init ? <Router isAuthenticated={isAuthenticated} /> : <Loader />}
+      </Layout>
+    </RecoilRoot>
   );
 };
 

@@ -1,6 +1,7 @@
 import { onClickSocialLogin } from "common/utils/userUtil";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { app } from "firebaseApp";
+import useTranslation from "hooks/useTranslation";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -13,7 +14,7 @@ const SignUpForm = () => {
   const [passwordConfirmation, setPasswordConfirmation] =
     React.useState<string>("");
   const navigate = useNavigate();
-
+  const t = useTranslation();
   const onSubmit = async (e: any) => {
     e.preventDefault();
     try {
@@ -69,9 +70,9 @@ const SignUpForm = () => {
 
   return (
     <form className="form form--lg" onSubmit={onSubmit}>
-      <div className="form__title">회원가입</div>
+      <div className="form__title">{t("SIGNUP_LINK")}</div>
       <div className="form__block">
-        <label htmlFor="email">이메일</label>
+        <label htmlFor="email">{t("FORM_EMAIL")}</label>
         <input
           type="text"
           name="email"
@@ -82,7 +83,7 @@ const SignUpForm = () => {
         />
       </div>
       <div className="form__block">
-        <label htmlFor="password">비밀번호</label>
+        <label htmlFor="password">{t("FORM_PASSWORD")}</label>
         <input
           type="password"
           name="password"
@@ -93,7 +94,9 @@ const SignUpForm = () => {
         />
       </div>
       <div className="form__block">
-        <label htmlFor="password_confirmation">비밀번호 확인</label>
+        <label htmlFor="password_confirmation">
+          {t("FORM_PASSWORD_CHECK")}
+        </label>
         <input
           type="password"
           name="password_confirmation"
@@ -110,9 +113,9 @@ const SignUpForm = () => {
       )}
 
       <div className="form__block">
-        계정이 있으신가요?
+        {t("YES_ACCOUNT")}
         <Link to="/users/login" className="form__link">
-          로그인하기
+          {t("SIGNIN_LINK")}
         </Link>
       </div>
       <div className="form__block--lg">
@@ -121,7 +124,7 @@ const SignUpForm = () => {
           className="form__btn--submit"
           disabled={error?.length > 0}
         >
-          회원가입
+          {t("SIGNUP_LINK")}
         </button>
       </div>
       <div className="form__block">
@@ -131,7 +134,7 @@ const SignUpForm = () => {
           className="form__btn--google"
           onClick={onClickSocialLogin}
         >
-          Google로 회원가입
+          {t("SIGNUP_GOOGLE")}
         </button>
       </div>
       <div className="form__block">
@@ -141,7 +144,7 @@ const SignUpForm = () => {
           className="form__btn--github"
           onClick={onClickSocialLogin}
         >
-          Github으로 회원가입
+          {t("SIGNUP_GITHUB")}
         </button>
       </div>
     </form>

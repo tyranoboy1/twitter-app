@@ -5,11 +5,13 @@ import { arrayRemove, doc, updateDoc } from "firebase/firestore";
 import { db } from "firebaseApp";
 import { toast } from "react-toastify";
 import styles from "components/comments/styles/comment.module.scss";
+import useTranslation from "hooks/useTranslation";
 
 /** 댓글 상자 컴포넌트 */
 const CommentBox = (props: ICommentBoxProps) => {
   const { data, post } = props;
   const { user } = useContext(AuthContext);
+  const t = useTranslation();
   /** 댓글 삭제 함수 */
   const handleDeleteComment = async () => {
     if (post) {
@@ -42,7 +44,7 @@ const CommentBox = (props: ICommentBoxProps) => {
               className="comment__delete-btn"
               onClick={handleDeleteComment}
             >
-              삭제
+              {t("BUTTON_DELETE")}
             </button>
           )}
         </div>
